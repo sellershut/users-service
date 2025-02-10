@@ -44,6 +44,8 @@ jobs:
           components: clippy
       - name: create env
         run: mv .env.example .env
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: install sqlx
         run: cargo install sqlx-cli
       - name: run migrations
@@ -57,6 +59,8 @@ jobs:
         with:
           reporter: 'github-pr-check'
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: stop docker stack
+        run: docker compose -f contrib/compose.yaml down -v
   doc:
     runs-on: ubuntu-latest
     name: nightly / doc
@@ -68,6 +72,8 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
       - name: create env
         run: mv .env.example .env
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: install sqlx
         run: cargo install sqlx-cli
       - name: run migrations
@@ -80,6 +86,8 @@ jobs:
         uses: dtolnay/install@cargo-docs-rs
       - name: cargo docs-rs
         run: cargo docs-rs
+      - name: stop docker stack
+        run: docker compose -f contrib/compose.yaml down -v
   hack:
     runs-on: ubuntu-latest
     name: ubuntu / stable / features
@@ -91,6 +99,8 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: create env
         run: mv .env.example .env
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: install protoc
         uses: arduino/setup-protoc@v3
         with:
@@ -103,6 +113,8 @@ jobs:
         uses: taiki-e/install-action@cargo-hack
       - name: cargo hack
         run: cargo hack --feature-powerset check
+      - name: stop docker stack
+        run: docker compose -f contrib/compose.yaml down -v
   msrv:
     runs-on: ubuntu-latest
     strategy:
@@ -117,6 +129,8 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.msrv }}
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: create env
         run: mv .env.example .env
       - name: install protoc
@@ -129,3 +143,5 @@ jobs:
         run: cargo sqlx migrate run
       - name: cargo +${{ matrix.msrv }} check
         run: cargo check
+      - name: stop docker stack
+        run: docker compose -f contrib/compose.yaml down -v
