@@ -33,6 +33,10 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: cargo generate-lockfile
         if: hashFiles('Cargo.lock') == ''
+      - name: install sqlx
+        run: cargo install sqlx-cli
+      - name: run migrations
+        run: cargo sqlx migrate run
         run: cargo generate-lockfile
       - name: cargo test --locked
         run: cargo test --locked --all-features --all-targets
@@ -57,8 +61,6 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: create env
-        run: mv .env.example .env
       - name: cargo generate-lockfile
         if: hashFiles('Cargo.lock') == ''
         run: cargo generate-lockfile
@@ -85,6 +87,10 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: install sqlx
+        run: cargo install sqlx-cli
+      - name: run migrations
+        run: cargo sqlx migrate run
       - name: cargo generate-lockfile
         if: hashFiles('Cargo.lock') == ''
         run: cargo generate-lockfile

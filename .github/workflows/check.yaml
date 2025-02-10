@@ -44,6 +44,10 @@ jobs:
           components: clippy
       - name: create env
         run: mv .env.example .env
+      - name: install sqlx
+        run: cargo install sqlx-cli
+      - name: run migrations
+        run: cargo sqlx migrate run
       - name: install protoc
         uses: arduino/setup-protoc@v3
         with:
@@ -64,6 +68,10 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
       - name: create env
         run: mv .env.example .env
+      - name: install sqlx
+        run: cargo install sqlx-cli
+      - name: run migrations
+        run: cargo sqlx migrate run
       - name: install protoc
         uses: arduino/setup-protoc@v3
         with:
@@ -87,6 +95,10 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: install sqlx
+        run: cargo install sqlx-cli
+      - name: run migrations
+        run: cargo sqlx migrate run
       - name: cargo install cargo-hack
         uses: taiki-e/install-action@cargo-hack
       - name: cargo hack
@@ -111,5 +123,9 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: install sqlx
+        run: cargo install sqlx-cli
+      - name: run migrations
+        run: cargo sqlx migrate run
       - name: cargo +${{ matrix.msrv }} check
         run: cargo check
