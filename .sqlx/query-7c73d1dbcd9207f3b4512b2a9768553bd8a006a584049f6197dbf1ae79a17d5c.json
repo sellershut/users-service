@@ -1,0 +1,110 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "insert into \"user\" (id, username, followers, avatar_url, inbox, public_key, private_key, local, email, display_name, ap_id)\n                values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "ap_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "username",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "display_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "avatar_url",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "email",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "inbox",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "public_key",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "private_key",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "local",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 10,
+        "name": "followers",
+        "type_info": "VarcharArray"
+      },
+      {
+        "ordinal": 11,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 12,
+        "name": "last_refreshed_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 13,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "VarcharArray",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Bool",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "7c73d1dbcd9207f3b4512b2a9768553bd8a006a584049f6197dbf1ae79a17d5c"
+}
