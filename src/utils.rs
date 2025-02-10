@@ -15,9 +15,7 @@ pub fn generate_id() -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::id::ID_LENGTH;
-
-    use super::generate_id;
+    use super::*;
 
     fn check_in_id(character: char, expected_result: bool) -> String {
         let id = generate_id();
