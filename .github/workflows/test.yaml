@@ -23,6 +23,10 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
+      - name: create env
+        run: mv .env.example .env
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: install protoc
         uses: arduino/setup-protoc@v3
         with:
@@ -34,6 +38,8 @@ jobs:
         run: cargo test --locked --all-features --all-targets
       - name: cargo test --doc
         run: cargo test --locked --all-features --doc
+      - name: stop docker stack
+        run: docker compose -f contrib/compose.yaml down -v
   os-check:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} / stable
@@ -51,6 +57,8 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: create env
+        run: mv .env.example .env
       - name: cargo generate-lockfile
         if: hashFiles('Cargo.lock') == ''
         run: cargo generate-lockfile
@@ -67,6 +75,10 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: llvm-tools-preview
+      - name: create env
+        run: mv .env.example .env
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: cargo install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
       - name: install protoc
@@ -86,3 +98,5 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           env_vars: OS,RUST
+      - name: stop docker stack
+        run: docker compose -f contrib/compose.yaml down -v
