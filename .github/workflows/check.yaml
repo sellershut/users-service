@@ -12,13 +12,17 @@ name: check
 jobs:
   sqlx:
     runs-on: ubuntu-latest
-    name: stable / fmt
+    name: stable / sqlx
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install stable
         uses: dtolnay/rust-toolchain@stable
+      - name: install protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: install sqlx
         run: cargo install sqlx-cli
       - name: create env
