@@ -23,12 +23,14 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: start docker stack
+        run: docker compose -f contrib/compose.yaml up -d
       - name: install sqlx
         run: cargo install sqlx-cli
       - name: create env
         run: mv .env.example .env
-      - name: start docker stack
-        run: docker compose -f contrib/compose.yaml up -d
+      - name: run migrations
+        run: cargo sqlx migrate run
       - name: check migrations
         run: cargo sqlx prepare --check
       - name: stop docker stack
