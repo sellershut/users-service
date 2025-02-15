@@ -37,6 +37,7 @@ jobs:
             #    type=ref,event=branch
             #    type=sha
       - name: build and push docker image
+        id: push
         uses: docker/build-push-action@v6
         with:
           context: .
