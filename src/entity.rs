@@ -23,6 +23,8 @@ pub struct User {
     pub private_key: Option<String>,
     pub public_key: String,
     pub inbox: String,
+    pub outbox: String,
+    pub summary: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
@@ -56,6 +58,8 @@ impl From<User> for sellershut_core::users::User {
             inbox: value.inbox.to_string(),
             private_key: value.private_key,
             public_key: value.public_key,
+            outbox: value.outbox,
+            summary: value.summary,
         }
     }
 }
@@ -83,6 +87,8 @@ impl TryFrom<sellershut_core::users::User> for User {
             local: value.local,
             private_key: value.private_key,
             public_key: value.public_key,
+            outbox: value.outbox,
+            summary: value.summary,
         })
     }
 }
@@ -135,6 +141,8 @@ mod tests {
             last_refreshed_at: datetime!(2023-01-03 12:00:00.000 UTC).into(),
             local: true,
             inbox: "inbox_value".to_string(),
+            outbox: "outbox_value".to_string(),
+            summary: None,
             private_key: Some("private_key_value".to_string()),
             public_key: "public_key_value".to_string(),
         };
@@ -155,6 +163,8 @@ mod tests {
         assert_eq!(proto_user.updated_at, user.updated_at.into());
         assert_eq!(proto_user.last_refreshed_at, user.last_refreshed_at.into());
         assert_eq!(proto_user.local, user.local);
+        assert_eq!(proto_user.outbox, user.outbox);
+        assert_eq!(proto_user.summary, user.summary);
         assert_eq!(proto_user.inbox, user.inbox);
         assert_eq!(proto_user.private_key, user.private_key);
         assert_eq!(proto_user.public_key, user.public_key);

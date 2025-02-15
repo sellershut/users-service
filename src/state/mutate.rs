@@ -21,8 +21,8 @@ impl MutateUsers for AppState {
 
         let user = sqlx::query_as!(
             entity::User,
-            "insert into \"user\" (id, username, followers, avatar_url, inbox, public_key, private_key, local, email, display_name, ap_id)
-                values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning *",
+            "insert into \"user\" (id, username, followers, avatar_url, inbox, public_key, private_key, local, email, display_name, ap_id, summary, outbox)
+                values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) returning *",
                 id,
             &data.username,
             &data.followers,
@@ -34,6 +34,8 @@ impl MutateUsers for AppState {
             data.email,
             data.display_name,
             &data.ap_id,
+            data.summary,
+            &data.outbox,
         )
         .fetch_one(&self.services.postgres)
         .await
@@ -56,8 +58,8 @@ impl MutateUsers for AppState {
 
         let user = sqlx::query_as!(
             entity::User,
-            "insert into \"user\" (id, username, followers, avatar_url, inbox, public_key, private_key, local, email, display_name, ap_id)
-                values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            "insert into \"user\" (id, username, followers, avatar_url, inbox, public_key, private_key, local, email, display_name, ap_id, summary, outbox)
+                values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
                 on conflict (ap_id)
                 do update 
                 set username = excluded.username,
@@ -67,7 +69,9 @@ impl MutateUsers for AppState {
                     public_key = excluded.public_key,
                     private_key = excluded.private_key,
                     id = excluded.id,
-                    local = excluded.local
+                    local = excluded.local,
+                    summary = excluded.summary,
+                    outbox = excluded.outbox
                 returning *",
             id,
             &data.username,
@@ -80,6 +84,8 @@ impl MutateUsers for AppState {
             data.email,
             data.display_name,
             &data.ap_id,
+            data.summary,
+            &data.outbox,
         )
         .fetch_one(&self.services.postgres)
         .await

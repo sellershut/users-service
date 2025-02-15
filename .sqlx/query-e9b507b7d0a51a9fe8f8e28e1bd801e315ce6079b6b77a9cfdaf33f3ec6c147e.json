@@ -40,36 +40,46 @@
       },
       {
         "ordinal": 7,
-        "name": "public_key",
+        "name": "outbox",
         "type_info": "Varchar"
       },
       {
         "ordinal": 8,
-        "name": "private_key",
+        "name": "summary",
         "type_info": "Varchar"
       },
       {
         "ordinal": 9,
+        "name": "public_key",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "private_key",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 11,
         "name": "local",
         "type_info": "Bool"
       },
       {
-        "ordinal": 10,
+        "ordinal": 12,
         "name": "followers",
         "type_info": "VarcharArray"
       },
       {
-        "ordinal": 11,
+        "ordinal": 13,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 12,
+        "ordinal": 14,
         "name": "last_refreshed_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 13,
+        "ordinal": 15,
         "name": "updated_at",
         "type_info": "Timestamptz"
       }
@@ -88,6 +98,8 @@
       true,
       true,
       false,
+      false,
+      true,
       false,
       true,
       false,
