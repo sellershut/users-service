@@ -1,6 +1,6 @@
 services:
   sellershut-db:
-    image: postgres:17.2
+    image: postgres:17.3
     restart: always
     shm_size: 128mb
     environment:
