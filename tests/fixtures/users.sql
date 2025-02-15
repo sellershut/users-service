@@ -2,7 +2,7 @@ insert into "user" (
     id, ap_id, username, display_name, avatar_url, email, inbox, public_key, private_key, local, followers, outbox
 ) values
     ('12345', 'https://example.com/users/johndoe', 'johndoe', 'John Doe', 'https://example.com/avatar1.png', 'john.doe@example.com', 'https://example.com/users/johndoe/inbox', 'public_key_12345', 'private_key_12345', true, 
-     '{"https://example.com/users/user_1", "https://example.com/users/user_2"}', 'https://example.com/users/johndoe/outbox'),
+     '{"https://example.com/users/alice_w", "https://example.com/users/annasmith"}', 'https://example.com/users/johndoe/outbox'),
     ('12346', 'https://example.com/users/janedoe', 'janedoe', 'Jane Doe', 'https://example.com/avatar2.png', 'jane.doe@example.com', 'https://example.com/users/janedoe/inbox', 'public_key_12346', 'private_key_12346', true, 
      '{"https://example.com/users/user_1", "https://example.com/users/user_3"}', 'https://example.com/users/janedoe/outbox'),
     ('12347', 'https://example.com/users/mike23', 'mike23', 'Mike', 'https://example.com/avatar3.png', 'mike23@example.com', 'https://example.com/users/mike23/inbox', 'public_key_12347', NULL, false, 

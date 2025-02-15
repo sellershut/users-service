@@ -2,7 +2,8 @@ use sellershut_core::{
     google,
     users::{
         query_users_server::QueryUsers, QueryUserByIdRequest, QueryUserByIdResponse,
-        QueryUserByNameRequest, QueryUserByNameResponse, QueryUsersResponse,
+        QueryUserByNameRequest, QueryUserByNameResponse, QueryUsersFollowingRequest,
+        QueryUsersFollowingResponse, QueryUsersResponse,
     },
 };
 use tonic::{Request, Response, Status};
@@ -26,7 +27,7 @@ impl QueryUsers for AppState {
         )
         .fetch_all(&self.services.postgres)
         .await
-        .map_err(|e| tonic::Status::unavailable(e.to_string()))?;
+        .map_err(|e| tonic::Status::internal(e.to_string()))?;
 
         let resp = QueryUsersResponse {
             users: user.into_iter().map(Into::into).collect(),
@@ -50,7 +51,7 @@ impl QueryUsers for AppState {
         )
         .fetch_optional(&self.services.postgres)
         .await
-        .map_err(|e| tonic::Status::unavailable(e.to_string()))?;
+        .map_err(|e| tonic::Status::internal(e.to_string()))?;
 
         let resp = QueryUserByNameResponse {
             user: user.map(Into::into),
@@ -69,11 +70,31 @@ impl QueryUsers for AppState {
         let user = sqlx::query_as!(entity::User, "select * from \"user\" where ap_id = $1", id)
             .fetch_optional(&self.services.postgres)
             .await
-            .map_err(|e| tonic::Status::unavailable(e.to_string()))?;
+            .map_err(|e| tonic::Status::not_found(e.to_string()))?;
 
         let resp = QueryUserByIdResponse {
             user: user.map(Into::into),
         };
+
+        Ok(tonic::Response::new(resp))
+    }
+
+    #[instrument(skip(self), err(Debug))]
+    async fn query_user_following(
+        &self,
+        request: Request<QueryUsersFollowingRequest>,
+    ) -> Result<Response<QueryUsersFollowingResponse>, Status> {
+        let id = request.into_inner().id;
+
+        let users = sqlx::query_scalar!(
+            "select u.ap_id from \"user\" u where $1 = any(u.followers)",
+            id
+        )
+        .fetch_all(&self.services.postgres)
+        .await
+        .map_err(|e| tonic::Status::unavailable(e.to_string()))?;
+
+        let resp = QueryUsersFollowingResponse { users };
 
         Ok(tonic::Response::new(resp))
     }

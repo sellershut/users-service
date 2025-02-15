@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "select u.ap_id from \"user\" u where $1 = any(u.followers)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ap_id",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "a8e128985ae2bb1ce94fd8cacd62de2d05adfeec59b285f2c6d57628c2853e32"
+}
