@@ -38,7 +38,7 @@ git = "https://github.com/sellershut/services-lib"
 features = ["api", "postgres", "tracing"]
 
 [dev-dependencies]
-fake = { version = "3.1.0", features = ["derive", "time"] }
+fake = { version = "4.0.0", features = ["derive", "time"] }
 
 [dev-dependencies.sellershut-core]
 git = "https://github.com/sellershut/sellershut-core"
