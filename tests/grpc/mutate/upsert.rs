@@ -13,7 +13,12 @@ async fn upsert_user(pool: sqlx::PgPool) -> Result<()> {
     user.ap_id = "https://example.com/users/johndoe".to_string();
 
     app.mutate
-        .upsert_user(UpsertUserRequest { user: user.clone() }.into_request())
+        .upsert_user(
+            UpsertUserRequest {
+                user: Some(user.clone()),
+            }
+            .into_request(),
+        )
         .await?;
 
     let getter = QueryUserByIdRequest {

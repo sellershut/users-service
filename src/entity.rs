@@ -44,8 +44,8 @@ impl From<Vec<std::string::String>> for Followers {
 impl From<User> for sellershut_core::users::User {
     fn from(value: User) -> Self {
         Self {
-            created_at: value.created_at.into(),
-            updated_at: value.updated_at.into(),
+            created_at: Some(value.created_at.into()),
+            updated_at: Some(value.updated_at.into()),
             followers: value.followers.col.into_iter().collect::<Vec<_>>(),
             id: value.id,
             ap_id: value.ap_id,
@@ -53,7 +53,7 @@ impl From<User> for sellershut_core::users::User {
             display_name: value.display_name,
             email: value.email,
             username: value.username,
-            last_refreshed_at: value.last_refreshed_at.into(),
+            last_refreshed_at: Some(value.last_refreshed_at.into()),
             local: value.local,
             inbox: value.inbox.to_string(),
             private_key: value.private_key,
@@ -80,10 +80,17 @@ impl TryFrom<sellershut_core::users::User> for User {
             followers: Followers {
                 col: value.followers.into_iter().collect::<HashSet<_>>(),
             },
-            created_at: created.try_into()?,
-            updated_at: updated.try_into()?,
+            created_at: created
+                .ok_or_else(|| anyhow::anyhow!("created_at is expected for user"))?
+                .try_into()?,
+            updated_at: updated
+                .ok_or_else(|| anyhow::anyhow!("updated_at is expected for user"))?
+                .try_into()?,
             inbox: value.inbox,
-            last_refreshed_at: value.last_refreshed_at.try_into()?,
+            last_refreshed_at: value
+                .last_refreshed_at
+                .ok_or_else(|| anyhow::anyhow!("last_refreshed_at is expected for user"))?
+                .try_into()?,
             local: value.local,
             private_key: value.private_key,
             public_key: value.public_key,
@@ -113,11 +120,17 @@ mod tests {
         assert_eq!(user.display_name, proto_user.display_name);
         assert_eq!(user.email, proto_user.email);
         assert_eq!(user.followers.col.len(), proto_user.followers.len());
-        assert_eq!(Timestamp::from(user.created_at), proto_user.created_at);
-        assert_eq!(Timestamp::from(user.updated_at), proto_user.updated_at);
+        assert_eq!(
+            Timestamp::from(user.created_at),
+            proto_user.created_at.unwrap()
+        );
+        assert_eq!(
+            Timestamp::from(user.updated_at),
+            proto_user.updated_at.unwrap()
+        );
         assert_eq!(
             Timestamp::from(user.last_refreshed_at),
-            proto_user.last_refreshed_at
+            proto_user.last_refreshed_at.unwrap()
         );
         assert_eq!(user.local, proto_user.local);
         assert_eq!(user.inbox, proto_user.inbox);
@@ -129,8 +142,8 @@ mod tests {
     #[test]
     fn test_proto_user_to_user_conversion() {
         let proto_user = sellershut_core::users::User {
-            created_at: datetime!(2023-01-01 12:00:00.000 UTC).into(),
-            updated_at: datetime!(2023-01-02 12:00:00.000 UTC).into(),
+            created_at: Some(datetime!(2023-01-01 12:00:00.000 UTC).into()),
+            updated_at: Some(datetime!(2023-01-02 12:00:00.000 UTC).into()),
             followers: vec!["follower1".to_string(), "follower2".to_string()],
             id: "user_id".to_string(),
             ap_id: "ap_id".to_string(),
@@ -138,7 +151,7 @@ mod tests {
             display_name: Some("Display Name".to_string()),
             email: Some("user@example.com".to_string()),
             username: "username".to_string(),
-            last_refreshed_at: datetime!(2023-01-03 12:00:00.000 UTC).into(),
+            last_refreshed_at: Some(datetime!(2023-01-03 12:00:00.000 UTC).into()),
             local: true,
             inbox: "inbox_value".to_string(),
             outbox: "outbox_value".to_string(),
@@ -159,9 +172,12 @@ mod tests {
         assert_eq!(proto_user.display_name, user.display_name);
         assert_eq!(proto_user.email, user.email);
         assert_eq!(proto_user.followers.len(), user.followers.col.len());
-        assert_eq!(proto_user.created_at, user.created_at.into());
-        assert_eq!(proto_user.updated_at, user.updated_at.into());
-        assert_eq!(proto_user.last_refreshed_at, user.last_refreshed_at.into());
+        assert_eq!(proto_user.created_at, Some(user.created_at.into()));
+        assert_eq!(proto_user.updated_at, Some(user.updated_at.into()));
+        assert_eq!(
+            proto_user.last_refreshed_at,
+            Some(user.last_refreshed_at.into())
+        );
         assert_eq!(proto_user.local, user.local);
         assert_eq!(proto_user.outbox, user.outbox);
         assert_eq!(proto_user.summary, user.summary);

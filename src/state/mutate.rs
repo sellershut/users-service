@@ -16,7 +16,10 @@ impl MutateUsers for AppState {
         &self,
         request: Request<CreateUserRequest>,
     ) -> Result<Response<CreateUserResponse>, Status> {
-        let data = request.into_inner().user;
+        let data = request
+            .into_inner()
+            .user
+            .ok_or_else(|| tonic::Status::internal("user not provided"))?;
         let id = generate_id();
 
         let user = sqlx::query_as!(
@@ -41,7 +44,7 @@ impl MutateUsers for AppState {
         .await
         .map_err(|e| Status::internal(e.to_string()))?;
 
-        let user = User::from(user);
+        let user = Some(User::from(user));
 
         let resp = CreateUserResponse { user };
 
@@ -53,7 +56,11 @@ impl MutateUsers for AppState {
         &self,
         request: Request<UpsertUserRequest>,
     ) -> Result<Response<UpsertUserResponse>, Status> {
-        let data = request.into_inner().user;
+        let data = request
+            .into_inner()
+            .user
+            .ok_or_else(|| tonic::Status::internal("user not provided"))?;
+
         let id = generate_id();
 
         let user = sqlx::query_as!(
@@ -91,7 +98,7 @@ impl MutateUsers for AppState {
         .await
         .map_err(|e| Status::internal(e.to_string()))?;
 
-        let user = User::from(user);
+        let user = Some(User::from(user));
 
         let req = UpsertUserResponse { user };
 
@@ -114,7 +121,7 @@ impl MutateUsers for AppState {
         .await
         .map_err(|e| Status::internal(e.to_string()))?;
 
-        let user = User::from(user);
+        let user = Some(User::from(user));
 
         let resp = DeleteUserResponse { user };
 
@@ -140,7 +147,7 @@ impl MutateUsers for AppState {
         .await
         .map_err(|e| Status::internal(e.to_string()))?;
 
-        let user = User::from(user);
+        let user = Some(User::from(user));
 
         let req = FollowUserResponse { user };
 

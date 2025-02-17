@@ -12,15 +12,16 @@ async fn create_user(pool: PgPool) -> Result<()> {
     let mut user = User::default();
     user.username = "test_username".to_string();
 
-    let user_request = CreateUserRequest { user };
+    let user_request = CreateUserRequest { user: Some(user) };
 
     let response = app
         .mutate
         .create_user(user_request.into_request())
         .await?
         .into_inner()
-        .user
-        .ap_id;
+        .user;
+
+    let response = response.unwrap().ap_id;
 
     let getter = QueryUserByIdRequest { id: response }.into_request();
 

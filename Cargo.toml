@@ -7,7 +7,7 @@ license = "AGPL-3.0-only"
 [dependencies]
 anyhow = "1.0.95"
 clap = { version = "4.5.28", features = ["derive"] }
-config = { version = "0.15.7", features = ["toml"] }
+config = { version = "0.15.7", features = ["toml"], default-features = false }
 nanoid = "0.4.0"
 prost = "0.13.4"
 serde = { version = "1.0.217", features = ["derive"] }
