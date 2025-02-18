@@ -1,5 +1,5 @@
 use anyhow::Result;
-use sellershut_core::users::{FollowUserRequest, QueryUserByIdRequest};
+use sellershut_core::users::{FollowUserRequest, QueryUserByApIdRequest};
 use sqlx::PgPool;
 use tonic::IntoRequest;
 
@@ -22,14 +22,14 @@ async fn follow_user(pool: PgPool) -> Result<()> {
         )
         .await?;
 
-    let getter = QueryUserByIdRequest {
-        id: base_id.to_string(),
+    let getter = QueryUserByApIdRequest {
+        ap_id: base_id.to_string(),
     }
     .into_request();
 
     let response = app
         .query
-        .query_user_by_id(getter)
+        .query_user_by_ap_id(getter)
         .await?
         .into_inner()
         .user

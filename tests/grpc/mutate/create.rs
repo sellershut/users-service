@@ -1,5 +1,5 @@
 use anyhow::Result;
-use sellershut_core::users::{CreateUserRequest, QueryUserByIdRequest, User};
+use sellershut_core::users::{CreateUserRequest, QueryUserByApIdRequest, User};
 use sqlx::PgPool;
 use tonic::IntoRequest;
 
@@ -23,9 +23,14 @@ async fn create_user(pool: PgPool) -> Result<()> {
 
     let response = response.unwrap().ap_id;
 
-    let getter = QueryUserByIdRequest { id: response }.into_request();
+    let getter = QueryUserByApIdRequest { ap_id: response }.into_request();
 
-    let response = app.query.query_user_by_id(getter).await?.into_inner().user;
+    let response = app
+        .query
+        .query_user_by_ap_id(getter)
+        .await?
+        .into_inner()
+        .user;
 
     assert!(response.is_some());
 

@@ -12,7 +12,7 @@ async fn followers(pool: sqlx::PgPool) -> Result<()> {
         .query
         .query_user_following(
             QueryUsersFollowingRequest {
-                id: String::from("https://example.com/users/user_1"),
+                ap_id: String::from("https://example.com/users/user_1"),
             }
             .into_request(),
         )

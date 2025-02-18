@@ -1,7 +1,7 @@
 use sellershut_core::{
     google,
     users::{
-        query_users_server::QueryUsers, QueryUserByIdRequest, QueryUserByIdResponse,
+        query_users_server::QueryUsers, QueryUserByApIdRequest, QueryUserByApIdResponse,
         QueryUserByNameRequest, QueryUserByNameResponse, QueryUsersFollowingRequest,
         QueryUsersFollowingResponse, QueryUsersResponse,
     },
@@ -61,18 +61,18 @@ impl QueryUsers for AppState {
     }
 
     #[instrument(skip(self), err(Debug))]
-    async fn query_user_by_id(
+    async fn query_user_by_ap_id(
         &self,
-        request: Request<QueryUserByIdRequest>,
-    ) -> Result<Response<QueryUserByIdResponse>, Status> {
-        let id = request.into_inner().id;
+        request: Request<QueryUserByApIdRequest>,
+    ) -> Result<Response<QueryUserByApIdResponse>, Status> {
+        let id = request.into_inner().ap_id;
 
         let user = sqlx::query_as!(entity::User, "select * from \"user\" where ap_id = $1", id)
             .fetch_optional(&self.services.postgres)
             .await
             .map_err(|e| tonic::Status::not_found(e.to_string()))?;
 
-        let resp = QueryUserByIdResponse {
+        let resp = QueryUserByApIdResponse {
             user: user.map(Into::into),
         };
 
@@ -84,7 +84,7 @@ impl QueryUsers for AppState {
         &self,
         request: Request<QueryUsersFollowingRequest>,
     ) -> Result<Response<QueryUsersFollowingResponse>, Status> {
-        let id = request.into_inner().id;
+        let id = request.into_inner().ap_id;
 
         let users = sqlx::query_scalar!(
             "select u.ap_id from \"user\" u where $1 = any(u.followers)",

@@ -110,7 +110,7 @@ impl MutateUsers for AppState {
         &self,
         request: Request<DeleteUserRequest>,
     ) -> Result<Response<DeleteUserResponse>, tonic::Status> {
-        let id = request.into_inner().id;
+        let id = request.into_inner().ap_id;
 
         let user = sqlx::query_as!(
             entity::User,

@@ -1,5 +1,5 @@
 use anyhow::Result;
-use sellershut_core::users::{QueryUserByIdRequest, UpsertUserRequest, User};
+use sellershut_core::users::{QueryUserByApIdRequest, UpsertUserRequest, User};
 use tonic::IntoRequest;
 
 use crate::helpers::TestApp;
@@ -21,14 +21,14 @@ async fn upsert_user(pool: sqlx::PgPool) -> Result<()> {
         )
         .await?;
 
-    let getter = QueryUserByIdRequest {
-        id: user.ap_id.to_string(),
+    let getter = QueryUserByApIdRequest {
+        ap_id: user.ap_id.to_string(),
     }
     .into_request();
 
     let response = app
         .query
-        .query_user_by_id(getter)
+        .query_user_by_ap_id(getter)
         .await?
         .into_inner()
         .user
