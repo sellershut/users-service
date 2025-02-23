@@ -1796,7 +1796,7 @@ dependencies = [
 [[package]]
 name = "sellershut-services"
 version = "0.1.0"
-source = "git+https://github.com/sellershut/services-lib#70331ce684530896fa2c7ad60a465125713e689a"
+source = "git+https://github.com/sellershut/services-lib#de2326f3366477b7814918300f5c24322f48c6c8"
 dependencies = [
  "bon",
  "nanoid",
