@@ -2,13 +2,15 @@ pub mod entity;
 pub mod server;
 pub mod state;
 
+use std::sync::Arc;
+
 use serde::Deserialize;
 use state::AppState;
 use tracing::{debug, trace};
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct AppConfig {
-    something: String,
+    pub something: Arc<str>,
 }
 
 pub async fn run(state: AppState, tx: tokio::sync::oneshot::Sender<u16>) -> anyhow::Result<()> {

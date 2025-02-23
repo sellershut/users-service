@@ -34,7 +34,7 @@ async fn main() -> Result<()> {
         .try_deserialize::<Configuration>()
         .inspect_err(|e| error!("config deserialise: {e}"))?;
 
-    let _app_config: AppConfig = serde_json::from_value(config.misc.clone())
+    let app_config: AppConfig = serde_json::from_value(config.misc.clone())
         .inspect_err(|e| error!("config misc deserialise: {e}"))?;
 
     let _tracing = TracingBuilder::new().build(config.application.log_level);
@@ -47,7 +47,7 @@ async fn main() -> Result<()> {
         .inspect_err(|e| error!("database: {e}"))?
         .build();
 
-    let state = AppState::new(config.application.port, services);
+    let state = AppState::new(config.application.port, services, app_config);
 
     users_service::run(state, tx).await?;
 

@@ -5,7 +5,7 @@ use sellershut_services::{tracing::TracingBuilder, Services};
 use sqlx::PgPool;
 use tokio::sync::oneshot;
 use tonic::transport::Channel;
-use users_service::state::AppState;
+use users_service::{state::AppState, AppConfig};
 
 use std::sync::Once;
 
@@ -28,7 +28,12 @@ impl TestApp {
         });
 
         let services = Services { postgres: pool };
-        let state = AppState::new(0, services);
+
+        let app_config = AppConfig {
+            something: "into".into(),
+        };
+
+        let state = AppState::new(0, services, app_config);
 
         dbg!(&state.addr.port());
 
