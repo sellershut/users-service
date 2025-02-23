@@ -7,11 +7,11 @@ log-level = "h2=info,debug"
 something = "http://localhost:8080"
 
 [database]
-pool_size = 100
+# pool_size = 100
 port = 5432
 name = "users"
 host = "localhost"
-user = "postgres"
+# user = "postgres"
 password = "password"
 
 # vim:ft=toml

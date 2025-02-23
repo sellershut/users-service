@@ -1,6 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
 use sellershut_services::{tracing::TracingBuilder, Configuration, Services};
+use tracing::error;
 use users_service::{state::AppState, AppConfig};
 
 /// users-service
@@ -26,10 +27,15 @@ async fn main() -> Result<()> {
 
     let config = config::Config::builder()
         .add_source(config::File::new(_config_path, config::FileFormat::Toml))
-        .build()?;
+        .build()
+        .inspect_err(|e| error!("config file: {e}"))?;
 
-    let config = config.try_deserialize::<Configuration>()?;
-    let _app_config: AppConfig = serde_json::from_value(config.misc.clone())?;
+    let config = config
+        .try_deserialize::<Configuration>()
+        .inspect_err(|e| error!("config deserialise: {e}"))?;
+
+    let _app_config: AppConfig = serde_json::from_value(config.misc.clone())
+        .inspect_err(|e| error!("config misc deserialise: {e}"))?;
 
     let _tracing = TracingBuilder::new().build(config.application.log_level);
 
@@ -37,7 +43,8 @@ async fn main() -> Result<()> {
 
     let services = Services::builder()
         .postgres(&config.database)
-        .await?
+        .await
+        .inspect_err(|e| error!("database: {e}"))?
         .build();
 
     let state = AppState::new(config.application.port, services);
