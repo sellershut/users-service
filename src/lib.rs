@@ -1,7 +1,6 @@
 pub mod entity;
 pub mod server;
 pub mod state;
-pub mod utils;
 
 use serde::Deserialize;
 use state::AppState;

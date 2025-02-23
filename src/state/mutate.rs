@@ -1,9 +1,10 @@
-use crate::{entity, utils::generate_id};
+use crate::entity;
 use sellershut_core::users::{
     mutate_users_server::MutateUsers, CreateUserRequest, CreateUserResponse, DeleteUserRequest,
     DeleteUserResponse, FollowUserRequest, FollowUserResponse, UpsertUserRequest,
     UpsertUserResponse, User,
 };
+use sellershut_services::utils::{self, ID_LENGTH};
 use tonic::{Request, Response, Status};
 use tracing::instrument;
 
@@ -20,7 +21,7 @@ impl MutateUsers for AppState {
             .into_inner()
             .user
             .ok_or_else(|| tonic::Status::internal("user not provided"))?;
-        let id = generate_id();
+        let id = utils::generate_id(ID_LENGTH);
 
         let user = sqlx::query_as!(
             entity::User,
@@ -61,7 +62,7 @@ impl MutateUsers for AppState {
             .user
             .ok_or_else(|| tonic::Status::internal("user not provided"))?;
 
-        let id = generate_id();
+        let id = utils::generate_id(ID_LENGTH);
 
         let user = sqlx::query_as!(
             entity::User,

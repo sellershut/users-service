@@ -1799,6 +1799,7 @@ version = "0.1.0"
 source = "git+https://github.com/sellershut/services-lib#70331ce684530896fa2c7ad60a465125713e689a"
 dependencies = [
  "bon",
+ "nanoid",
  "secrecy",
  "serde",
  "serde_json",
@@ -2636,7 +2637,6 @@ dependencies = [
  "clap",
  "config",
  "fake",
- "nanoid",
  "prost",
  "sellershut-core",
  "sellershut-services",
