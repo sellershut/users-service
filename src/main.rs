@@ -1,8 +1,8 @@
 use anyhow::Result;
 use clap::Parser;
-use sellershut_services::{tracing::TracingBuilder, Configuration, Services};
+use sellershut_services::{Configuration, Services, tracing::TracingBuilder};
 use tracing::error;
-use users_service::{state::AppState, AppConfig};
+use users_service::{AppConfig, state::AppState};
 
 /// users-service
 #[derive(Parser, Debug)]

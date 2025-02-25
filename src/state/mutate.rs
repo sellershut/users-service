@@ -1,8 +1,8 @@
 use crate::entity;
 use sellershut_core::users::{
-    mutate_users_server::MutateUsers, CreateUserRequest, CreateUserResponse, DeleteUserRequest,
-    DeleteUserResponse, FollowUserRequest, FollowUserResponse, UpsertUserRequest,
-    UpsertUserResponse, User,
+    CreateUserRequest, CreateUserResponse, DeleteUserRequest, DeleteUserResponse,
+    FollowUserRequest, FollowUserResponse, UpsertUserRequest, UpsertUserResponse, User,
+    mutate_users_server::MutateUsers,
 };
 use sellershut_services::utils::{self, ID_LENGTH};
 use tonic::{Request, Response, Status};

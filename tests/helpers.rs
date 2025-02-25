@@ -1,11 +1,11 @@
 use sellershut_core::users::{
     mutate_users_client::MutateUsersClient, query_users_client::QueryUsersClient,
 };
-use sellershut_services::{tracing::TracingBuilder, Services};
+use sellershut_services::{Services, tracing::TracingBuilder};
 use sqlx::PgPool;
 use tokio::sync::oneshot;
 use tonic::transport::Channel;
-use users_service::{state::AppState, AppConfig};
+use users_service::{AppConfig, state::AppState};
 
 use std::sync::Once;
 

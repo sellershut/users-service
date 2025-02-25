@@ -1,9 +1,9 @@
 use sellershut_core::{
     google,
     users::{
-        query_users_server::QueryUsers, QueryUserByApIdRequest, QueryUserByApIdResponse,
-        QueryUserByNameRequest, QueryUserByNameResponse, QueryUsersFollowingRequest,
-        QueryUsersFollowingResponse, QueryUsersResponse,
+        QueryUserByApIdRequest, QueryUserByApIdResponse, QueryUserByNameRequest,
+        QueryUserByNameResponse, QueryUsersFollowingRequest, QueryUsersFollowingResponse,
+        QueryUsersResponse, query_users_server::QueryUsers,
     },
 };
 use tonic::{Request, Response, Status};

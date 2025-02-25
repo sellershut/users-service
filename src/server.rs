@@ -2,7 +2,7 @@ use sellershut_core::users::{
     mutate_users_server::MutateUsersServer, query_users_server::QueryUsersServer,
 };
 
-use tonic::transport::{server::TcpIncoming, Server};
+use tonic::transport::{Server, server::TcpIncoming};
 use tracing::info;
 
 use crate::state::AppState;
